@@ -1,0 +1,16 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+#send-message, #receive-messages {
+    margin-bottom: 20px;
+}
+#messages {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #fff;
+    height: 200px;
+    overflow-y: scroll;
+}

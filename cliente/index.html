@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>mensajes</title>
+    
+
+</head>
+<body>
+    <div id="send-message">
+        <h2>Enviar Mensaje</h2>
+        <form id="message-form">
+            <label for="message">Mensaje:</label>
+            <input type="text" id="message" required>
+            <label for="recipient">Destinatario:</label>
+            <select id="recipient" required>
+                <option value="alumno">Alumno</option>
+                <option value="docente">Docente</option>
+            </select>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <div id="receive-messages">
+        <h2>Mensajes Recibidos</h2>
+        <div id="messages"></div>
+    </div>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const messageForm = document.getElementById('message-form');
+            const messageInput = document.getElementById('message');
+            const recipientSelect = document.getElementById('recipient');
+            const messagesDiv = document.getElementById('messages');
+
+            const localMessages = [];
+            const eventSource = new EventSource(''); 
+
+        
+            const dispatchEvent = (message) => {
+                const event = new CustomEvent('message', { detail: message });
+                eventSource.dispatchEvent(event);
+            };
+
+        
+            eventSource.addEventListener('message', (event) => {
+                const { message, recipient } = event.detail;
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `Mensaje: ${message}, Destinatario: ${recipient}`;
+                messagesDiv.appendChild(messageElement);
+            });
+
+        
+            messageForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const message = messageInput.value;
+                const recipient = recipientSelect.value;
+
+                const newMessage = { message, recipient };
+                localMessages.push(newMessage);
+                dispatchEvent(newMessage);
+
+                messageInput.value = '';
+            });
+        });
+    </script>
+</body>
+</html>
